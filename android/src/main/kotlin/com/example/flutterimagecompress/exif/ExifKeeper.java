@@ -33,13 +33,17 @@ public class ExifKeeper {
           "GPSProcessingMethod",
           "GPSTimeStamp",
           "DateTime",
+          "DateTimeDigitized", "DateTimeOriginal","Software","ColorSpace","Compression", //20210203, wa
+          "MeteringMode", "MaxApertureValue","ExposureBiasValue","FocalLengthIn35mmFilm","BrightnessValue", //20210203, wa
+          "Sharpness", "Contrast","DigitalZoomRatio","SceneCaptureType","LightSource","Saturation","ExposureProgram", //20210203, wa
           "Flash",
           "GPSLatitude",
           "GPSLatitudeRef",
           "GPSLongitude",
           "GPSLongitudeRef",
           "Make",
-          "Model");
+          "Model"
+      );
 
   private ExifInterface oldExif;
 

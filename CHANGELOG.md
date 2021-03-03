@@ -1,9 +1,5 @@
 # CHANGELOG
 
-## 1.0.0-nullsafety
-
-Migrate null-safety version.
-
 ## 0.7.0
 
 - Fix

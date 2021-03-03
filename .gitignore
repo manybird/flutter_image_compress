@@ -10,4 +10,3 @@ build/
 .flutter-plugins-dependencies
 .vscode/settings.json
 flutter_export_environment.sh
-.env

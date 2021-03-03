@@ -43,10 +43,10 @@ class _MyAppState extends State<MyApp> {
     final result =
         await FlutterImageCompress.compressWithList(data.buffer.asUint8List());
 
-    print("after = ${result.length}");
+    print("after = ${result?.length ?? 0}");
   }
 
-  ImageProvider? provider;
+  ImageProvider provider;
 
   @override
   Widget build(BuildContext context) {
@@ -65,47 +65,47 @@ class _MyAppState extends State<MyApp> {
               ),
               aspectRatio: 1 / 1,
             ),
-            TextButton(
+            FlatButton(
               child: Text('CompressFile and rotate 180'),
               onPressed: _testCompressFile,
             ),
-            TextButton(
+            FlatButton(
               child: Text('CompressAndGetFile and rotate 90'),
               onPressed: getFileImage,
             ),
-            TextButton(
+            FlatButton(
               child: Text('CompressAsset and rotate 135'),
               onPressed: () => testCompressAsset("img/img.jpg"),
             ),
-            TextButton(
+            FlatButton(
               child: Text('CompressList and rotate 270'),
               onPressed: compressListExample,
             ),
-            TextButton(
+            FlatButton(
               child: Text('test compress auto angle'),
               onPressed: _compressAssetAndAutoRotate,
             ),
-            TextButton(
+            FlatButton(
               child: Text('Test png '),
               onPressed: _compressPngImage,
             ),
-            TextButton(
+            FlatButton(
               child: Text('Format transparent PNG'),
               onPressed: _compressTransPNG,
             ),
-            TextButton(
+            FlatButton(
               child: Text('Restore transparent PNG'),
               onPressed: _restoreTransPNG,
             ),
-            TextButton(
+            FlatButton(
               child: Text('Keep exif image'),
               onPressed: _compressImageAndKeepExif,
             ),
-            TextButton(
+            FlatButton(
               child: Text('Convert to heic format and print the file url'),
               onPressed: _compressHeicExample,
             ),
-            TextButton(
+            FlatButton(
               child: Text('Convert to webp format, Just support android'),
               onPressed: _compressAndroidWebpExample,
             ),
@@ -138,9 +138,6 @@ class _MyAppState extends State<MyApp> {
     file.writeAsBytesSync(data.buffer.asUint8List());
 
     final result = await testCompressFile(file);
-
-    if (result == null) return;
-
     ImageProvider provider = MemoryImage(result);
     this.provider = provider;
     setState(() {});
@@ -185,15 +182,11 @@ class _MyAppState extends State<MyApp> {
     final targetPath = dir.absolute.path + "/temp.jpg";
     final imgFile = await testCompressAndGetFile(file, targetPath);
 
-    if (imgFile == null) {
-      return;
-    }
-
     provider = FileImage(imgFile);
     setState(() {});
   }
 
-  Future<Uint8List?> testCompressFile(File file) async {
+  Future<Uint8List> testCompressFile(File file) async {
     print("testCompressFile");
     final result = await FlutterImageCompress.compressWithFile(
       file.absolute.path,
@@ -203,11 +196,11 @@ class _MyAppState extends State<MyApp> {
       rotate: 180,
     );
     print(file.lengthSync());
-    print(result?.length);
+    print(result.length);
     return result;
   }
 
-  Future<File?> testCompressAndGetFile(File file, String targetPath) async {
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
     print("testCompressAndGetFile");
     final result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -219,7 +212,7 @@ class _MyAppState extends State<MyApp> {
     );
 
     print(file.lengthSync());
-    print(result?.lengthSync());
+    print(result.lengthSync());
 
     return result;
   }
@@ -233,8 +226,6 @@ class _MyAppState extends State<MyApp> {
       quality: 96,
       rotate: 135,
     );
-
-    if (list == null) return;
 
     this.provider = MemoryImage(Uint8List.fromList(list));
     setState(() {});
@@ -276,9 +267,6 @@ class _MyAppState extends State<MyApp> {
       quality: 95,
       // autoCorrectionAngle: false,
     );
-
-    if (result == null) return;
-
     final u8list = Uint8List.fromList(result);
     this.provider = MemoryImage(u8list);
     setState(() {});
@@ -290,8 +278,6 @@ class _MyAppState extends State<MyApp> {
       minWidth: 300,
       minHeight: 500,
     );
-
-    if (result == null) return;
 
     final u8list = Uint8List.fromList(result);
     this.provider = MemoryImage(u8list);
@@ -327,8 +313,6 @@ class _MyAppState extends State<MyApp> {
       keepExif: true,
     );
 
-    if (result == null) return;
-
     this.provider = MemoryImage(Uint8List.fromList(result));
     setState(() {});
 
@@ -351,9 +335,6 @@ class _MyAppState extends State<MyApp> {
       format: CompressFormat.heic,
       quality: 90,
     );
-
-    if (result == null) return;
-
     print("Compress heic success.");
     logger.logTime();
     print("src, path = $srcPath length = ${File(srcPath).lengthSync()}");
@@ -379,9 +360,6 @@ class _MyAppState extends State<MyApp> {
       minWidth: 800,
       quality: quality,
     );
-
-    if (result == null) return;
-
     print("Compress webp success.");
     logger.logTime();
     print("src, path = $srcPath length = ${File(srcPath).lengthSync()}");
@@ -399,10 +377,10 @@ Future<Uint8List> getAssetImageUint8List(String key) async {
 }
 
 double calcScale({
-  required double srcWidth,
-  required double srcHeight,
-  required double minWidth,
-  required double minHeight,
+  double srcWidth,
+  double srcHeight,
+  double minWidth,
+  double minHeight,
 }) {
   final scaleW = srcWidth / minWidth;
   final scaleH = srcHeight / minHeight;
